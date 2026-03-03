@@ -24,7 +24,7 @@ public class Role {
     private Long id;
 
 
-    @NotBlank(message = "required")
+    @NotBlank(message = "authority is required")
     @Column(nullable = false , unique = true)
     private String authority;
 
