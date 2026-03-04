@@ -16,12 +16,15 @@ public class AddressRequest {
     private String addressLine;
 
     @NotBlank(message = "city is required")
+    @Size(min = 2, max = 100, message = "City must be 2 to 100 characters")
     private String city;
 
     @NotBlank(message = "state is required")
+    @Size(min = 2, max = 100, message = "State must be 2 to 100 characters")
     private String state;
 
     @NotBlank(message = "Country is required")
+    @Size(min = 2, max = 100, message = "Country must be 2 to 100 characters")
     private String country;
 
     @NotBlank(message = "Zip code is required")

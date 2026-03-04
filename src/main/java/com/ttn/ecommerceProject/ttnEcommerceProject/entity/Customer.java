@@ -11,8 +11,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
-@Table(name = "customer")
+@Table(name = "customers")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,9 +22,10 @@ import lombok.Setter;
 public class Customer {
 
     @Id
-    private Long id;
+    @Column(name="user_id")
+    private UUID id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId
     @JoinColumn(name = "user_id")
     @JsonIgnore

@@ -13,6 +13,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "users")
@@ -22,8 +23,9 @@ import java.util.Set;
 @AllArgsConstructor
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(updatable = false, nullable = false)
+    private UUID id;
 
     @Size(min = 2, max = 50 , message = "first name must be between 2 and 5 characters")
     @NotBlank(message = "firstName required")
@@ -45,6 +47,7 @@ public class User {
 
     @NotBlank(message = "Password is required")
     @Column(nullable = false)
+
     private String password;
 
 
