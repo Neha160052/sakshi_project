@@ -21,7 +21,7 @@ public class ActivationService {
         tokenRepo.deleteByUserId(user.getId());
 
         ActivationToken token = new ActivationToken();
-        token.setId(UUID.randomUUID());
+
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
         token.setExpiryDateTime(LocalDateTime.now().plusHours(3));

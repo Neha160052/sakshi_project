@@ -21,9 +21,9 @@ import java.util.UUID;
 @AllArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name ="id" , columnDefinition = "char(36)")
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name ="id")
+    private Long id;
 
 
     @NotBlank(message = "authority is required")

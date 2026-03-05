@@ -1,3 +1,3 @@
-INSERT INTO roles(authority) VALUES ('CUSTOMER');
-INSERT INTO roles(authority) VALUES ('SELLER');
-INSERT INTO roles(authority) VALUES ('ADMIN');
+INSERT IGNORE INTO roles(authority) VALUES ('ROLE_CUSTOMER');
+INSERT IGNORE INTO roles(authority) VALUES ('ROLE_SELLER');
+INSERT IGNORE  INTO roles(authority) VALUES ('ROLE_ADMIN');

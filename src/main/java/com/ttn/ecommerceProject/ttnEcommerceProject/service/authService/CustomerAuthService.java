@@ -36,7 +36,7 @@ public class CustomerAuthService {
                 .orElseThrow(()-> new RuntimeException("customer role not found"));
 
         User user = new User();
-        user.setId(java.util.UUID.randomUUID());
+
         user.setFirstName(req.getFirstName());
         user.setLastName(req.getLastName());
         user.setMiddleName(req.getMiddleName());
