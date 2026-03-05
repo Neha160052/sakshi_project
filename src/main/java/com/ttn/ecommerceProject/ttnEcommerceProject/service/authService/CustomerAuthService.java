@@ -27,7 +27,7 @@ public class CustomerAuthService {
 
     @Transactional
     public void register(CustomerRegisterRequest req){
-        if(userRepo.existByEmail(req.getEmail())){
+        if(userRepo.existsByEmail(req.getEmail())){
             throw new RuntimeException("Email already registered");
         }
         passwordService.passwordMatch(req.getPassword() , req.getConfirmPassword());
@@ -65,7 +65,10 @@ public class CustomerAuthService {
                 address.setState(a.getState());
                 address.setCountry(a.getCountry());
                 address.setZipCode(a.getZipCode());
+
+                addressRepo.save(address);
             }
+
         }
 
         ActivationToken token = activationService.createToken(user);

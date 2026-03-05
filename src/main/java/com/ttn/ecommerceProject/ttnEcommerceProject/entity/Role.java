@@ -22,6 +22,7 @@ import java.util.UUID;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name ="id" , columnDefinition = "char(36)")
     private UUID id;
 
 

@@ -44,4 +44,18 @@ public class Seller {
     )
     @Column(nullable = false)
     private String companyContact;
+
+    @NotBlank(message = "GST number is required")
+    @Pattern(
+            regexp = "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z0-9]{1}Z[A-Z0-9]{1}$",
+            message = "Invalid GST number format"
+    )
+    @Column(nullable = false, unique = true, length = 15)
+    private String gst;
+
+
+
+    //check it later
+    @Column(nullable = false)
+    private boolean isApproved = false;
 }
