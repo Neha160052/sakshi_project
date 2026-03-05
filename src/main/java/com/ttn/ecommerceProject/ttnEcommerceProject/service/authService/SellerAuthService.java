@@ -36,8 +36,26 @@ public class SellerAuthService {
             if (!passwordService.matches(req.getPassword(), user.getPassword())) {
                 throw new RuntimeException("Invalid credentials");
             }
-            if (sellerRepo.findByUserId(user.getId()).isPresent()) {
-                throw new RuntimeException("seller already registerd");
+//            if (sellerRepo.findByUserId(user.getId()).isPresent()) {
+//
+//                throw new RuntimeException("seller already registerd");
+//            }
+
+            Seller seller = sellerRepo.findByUserId(user.getId()).orElse(null);
+
+            if (seller != null) {
+
+                if (seller.getStatus() == SellerStatus.PENDING) {
+                    throw new RuntimeException("Seller request already pending approval");
+                }
+
+                if (seller.getStatus() == SellerStatus.APPROVED) {
+                    throw new RuntimeException("Seller already registered");
+                }
+
+                if (seller.getStatus() == SellerStatus.REJECTED) {
+                    throw new RuntimeException("Seller request rejected. Please contact admin.");
+                }
             }
             if (!user.isActive()) {
                 ActivationToken token = activationService.createToken(user);
@@ -52,8 +70,8 @@ public class SellerAuthService {
             passwordService.passwordMatch(req.getPassword(), req.getConfirmPassword());
 
             user = new User();
-            user.setId(UUID.randomUUID());
-            user.setFirstName(req.getFirstname());
+          //  user.setId(UUID.randomUUID());
+            user.setFirstName(req.getFirstName());
             user.setMiddleName(req.getMiddleName());
             user.setLastName(req.getLastName());
             user.setEmail(req.getEmail());
@@ -80,7 +98,8 @@ public class SellerAuthService {
         seller.setGst(req.getGst());
         seller.setCompanyName(req.getCompanyName());
         seller.setCompanyContact(req.getCompanyContact());
-        seller.setApproved(false);
+        seller.setStatus(SellerStatus.PENDING);
+
         sellerRepo.save(seller);
 
 

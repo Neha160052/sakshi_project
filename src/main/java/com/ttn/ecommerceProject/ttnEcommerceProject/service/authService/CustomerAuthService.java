@@ -26,9 +26,25 @@ public class CustomerAuthService {
 
 
     @Transactional
-    public void register(CustomerRegisterRequest req){
-        if(userRepo.existsByEmail(req.getEmail())){
-            throw new RuntimeException("Email already registered");
+    public String register(CustomerRegisterRequest req){
+
+
+//        if(userRepo.existsByEmail(req.getEmail())){
+//            throw new RuntimeException("Email already registered");
+//        }
+
+        User exist = userRepo.findByEmail(req.getEmail()).orElse(null);
+        if(exist !=null){
+            if(exist.isActive()){
+                return "Email already registered. You can login" ;
+
+            }else{
+                ActivationToken token = activationService.createToken(exist);
+
+                String link = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
+                emailService.sendActivationMail(exist.getEmail() , link);
+                return "Account already exist but InActive. We have resent the activation link , please check your email.";
+            }
         }
         passwordService.passwordMatch(req.getPassword() , req.getConfirmPassword());
 
@@ -74,6 +90,8 @@ public class CustomerAuthService {
         ActivationToken token = activationService.createToken(user);
         String linkToken = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
         emailService.sendActivationMail(user.getEmail() , linkToken);
+
+        return "Registration successful.Please check you email to activate your account";
 
     }
 

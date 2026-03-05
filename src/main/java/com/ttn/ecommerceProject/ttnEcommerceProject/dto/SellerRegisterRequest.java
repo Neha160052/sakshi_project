@@ -17,7 +17,7 @@ public class SellerRegisterRequest {
 
     @NotBlank
     @Size(min = 2, max = 50)
-    private String firstname;
+    private String firstName;
 
     @Size(max = 50)
     private String middleName;

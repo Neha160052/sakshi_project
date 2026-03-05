@@ -55,7 +55,7 @@ public class Seller {
 
 
 
-    //check it later
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean isApproved = false;
+    private SellerStatus status = SellerStatus.PENDING;
 }
