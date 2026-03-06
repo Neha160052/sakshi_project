@@ -1,7 +1,7 @@
 package com.ttn.ecommerceProject.ttnEcommerceProject.service.authService;
 
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.AddressRequest;
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.CustomerRegisterRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.AddressRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.CustomerRegisterRequest;
 import com.ttn.ecommerceProject.ttnEcommerceProject.entity.*;
 import com.ttn.ecommerceProject.ttnEcommerceProject.repo.AddressRepo;
 import com.ttn.ecommerceProject.ttnEcommerceProject.repo.CustomerRepo;
@@ -35,16 +35,52 @@ public class CustomerAuthService {
 
         User exist = userRepo.findByEmail(req.getEmail()).orElse(null);
         if(exist !=null){
-            if(exist.isActive()){
-                return "Email already registered. You can login" ;
 
-            }else{
-                ActivationToken token = activationService.createToken(exist);
-
-                String link = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
-                emailService.sendActivationMail(exist.getEmail() , link);
-                return "Account already exist but InActive. We have resent the activation link , please check your email.";
+            if(!passwordService.matches(req.getPassword(), exist.getPassword())){
+                throw new RuntimeException("Invalid credentials");
             }
+            if(customerRepo.findById(exist.getId()).isPresent()){
+                throw new RuntimeException("Customer already exist");
+            }
+//            if(exist.isActive()){
+//                return "Email already registered. You can login" ;
+            if (!exist.isActive()) {
+                ActivationToken token = activationService.createToken(exist);
+                String link = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
+                emailService.sendActivationMail(exist.getEmail(), link);
+                return "Account not activated. Activation link resent.";
+            }
+            boolean alreadyHasCustomerRole = exist.getRoles().stream()
+                    .anyMatch(r -> "CUSTOMER".equalsIgnoreCase(r.getAuthority()));
+
+            if (!alreadyHasCustomerRole) {
+                Role customerRole = roleRepo.findByAuthority("CUSTOMER")
+                        .orElseThrow(() -> new RuntimeException("customer role not found"));
+                exist.getRoles().add(customerRole);
+                userRepo.save(exist);
+            }
+
+            Customer customer = new Customer();
+            customer.setUser(exist);
+            customer.setContact(req.getContact());
+            customerRepo.save(customer);
+
+            if (req.getAddresses() != null && !req.getAddresses().isEmpty()) {
+                for (AddressRequest a : req.getAddresses()) {
+                    Address address = new Address();
+                    address.setUser(exist);
+                    address.setAddressLine(a.getAddressLine());
+                    address.setCity(a.getCity());
+                    address.setState(a.getState());
+                    address.setCountry(a.getCountry());
+                    address.setZipCode(a.getZipCode());
+                    addressRepo.save(address);
+                }
+            }
+
+            return "Customer registered successfully";
+
+
         }
         passwordService.passwordMatch(req.getPassword() , req.getConfirmPassword());
 

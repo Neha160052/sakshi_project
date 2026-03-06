@@ -2,8 +2,8 @@ package com.ttn.ecommerceProject.ttnEcommerceProject.controller;
 
 
 import com.ttn.ecommerceProject.ttnEcommerceProject.dto.ApiResponse;
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.CustomerRegisterRequest;
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.ResendActivationRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.CustomerRegisterRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.ResendActivationRequest;
 import com.ttn.ecommerceProject.ttnEcommerceProject.service.authService.CustomerAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

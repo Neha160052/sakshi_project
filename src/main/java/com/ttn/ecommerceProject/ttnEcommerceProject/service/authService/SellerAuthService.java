@@ -1,8 +1,8 @@
 package com.ttn.ecommerceProject.ttnEcommerceProject.service.authService;
 
 
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.AddressRequest;
-import com.ttn.ecommerceProject.ttnEcommerceProject.dto.SellerRegisterRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.AddressRequest;
+import com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto.SellerRegisterRequest;
 import com.ttn.ecommerceProject.ttnEcommerceProject.entity.*;
 import com.ttn.ecommerceProject.ttnEcommerceProject.repo.AddressRepo;
 import com.ttn.ecommerceProject.ttnEcommerceProject.repo.RoleRepo;
@@ -12,8 +12,6 @@ import com.ttn.ecommerceProject.ttnEcommerceProject.service.emailService.EmailSe
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

@@ -47,7 +47,6 @@ public class User {
 
     @NotBlank(message = "Password is required")
     @Column(nullable = false)
-
     private String password;
 
 
@@ -67,7 +66,7 @@ public class User {
     private LocalDateTime passwordUpdateDate;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="user_role" , joinColumns = @JoinColumn(name="user_id") ,
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
@@ -81,11 +80,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Address> addresses = new HashSet<>();
-
-
-
-
-
 
 
 }

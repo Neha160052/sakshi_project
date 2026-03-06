@@ -1,4 +1,4 @@
-package com.ttn.ecommerceProject.ttnEcommerceProject.dto;
+package com.ttn.ecommerceProject.ttnEcommerceProject.dto.registerDto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
