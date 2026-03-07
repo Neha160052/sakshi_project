@@ -24,11 +24,11 @@ public class CustomerAuthController {
                 .body(new ApiResponse("registration successfull. check your email to activate your account."));
     }
 
-    @PutMapping("/activate")
-    public ResponseEntity<ApiResponse> activate(@RequestParam String token){
-        customerAuthService.activate(token);
-        return ResponseEntity.ok(new ApiResponse("Account activates successfully"));
-    }
+//    @GetMapping("/activate")
+//    public ResponseEntity<ApiResponse> activate(@RequestParam String token){
+//        customerAuthService.activate(token);
+//        return ResponseEntity.ok(new ApiResponse("Account activates successfully"));
+//    }
 
     @PostMapping("/resend-activation")
     public ResponseEntity<ApiResponse> resend(@Valid @RequestBody ResendActivationRequest req){

@@ -31,7 +31,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws IOException, ServletException {
 
-        if (request.getRequestURI().equals("/auth/login")) {
+        if (request.getRequestURI().equals("/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }

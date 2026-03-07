@@ -5,10 +5,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
-    @Async
-    public void sendActivationMail(String email , String link){
-        System.out.println("Activation mail sent to: " + email);
-        System.out.println("Activation link: " + link);
-    }
+public interface EmailService {
+
+    void sendActivationEmail(String toEmail, String text, String token);
+
+    void sendResetPasswordEmail(String toEmail, String token);
 }

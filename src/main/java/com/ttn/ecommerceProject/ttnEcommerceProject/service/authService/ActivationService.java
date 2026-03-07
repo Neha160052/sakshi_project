@@ -3,6 +3,7 @@ package com.ttn.ecommerceProject.ttnEcommerceProject.service.authService;
 import com.ttn.ecommerceProject.ttnEcommerceProject.entity.ActivationToken;
 import com.ttn.ecommerceProject.ttnEcommerceProject.entity.User;
 import com.ttn.ecommerceProject.ttnEcommerceProject.repo.ActivationTokenRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ public class ActivationService {
         this.tokenRepo = tokenRepo;
     }
 
+    @Transactional
     public ActivationToken createToken(User user){
 
         tokenRepo.deleteByUserId(user.getId());

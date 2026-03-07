@@ -30,14 +30,15 @@ public class SellerAuthService {
                 .orElseThrow(() -> new RuntimeException("Seller role not found"));
 
         User user = userRepo.findByEmail(req.getEmail()).orElse(null);
+
         if (user != null) {
             if (!passwordService.matches(req.getPassword(), user.getPassword())) {
                 throw new RuntimeException("Invalid credentials");
             }
-//            if (sellerRepo.findByUserId(user.getId()).isPresent()) {
-//
-//                throw new RuntimeException("seller already registerd");
-//            }
+
+            //            if (sellerRepo.findByUserId(user.getId()).isPresent()) {
+            //                throw new RuntimeException("seller already registerd");
+            //            }
 
             Seller seller = sellerRepo.findByUserId(user.getId()).orElse(null);
 
@@ -55,20 +56,42 @@ public class SellerAuthService {
                     throw new RuntimeException("Seller request rejected. Please contact admin.");
                 }
             }
+
             if (!user.isActive()) {
                 ActivationToken token = activationService.createToken(user);
-                String link = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
-                emailService.sendActivationMail(user.getEmail(), link);
-                throw new RuntimeException("Account not activated . Activation link resent");
+
+
+                // String link = "Activate your account using this link:\n\n" + token ;
+                // emailService.sendActivationEmail(user.getEmail(), "Account Activation", link);
+
+                // CORRECT VERSION
+                emailService.sendActivationEmail(
+                        user.getEmail(),
+                        "Account Activation",
+                        token.getToken()
+                );
+
+                throw new RuntimeException("Account not activated. Activation link resent");
             }
 
-            user.getRoles().add(sellerRole);
-            userRepo.save(user);
+
+            // user.getRoles().add(sellerRole);
+            // userRepo.save(user);
+
+            // CORRECT VERSION
+            boolean alreadyHasSellerRole = user.getRoles().stream()
+                    .anyMatch(r -> "SELLER".equalsIgnoreCase(r.getAuthority()));
+
+            if (!alreadyHasSellerRole) {
+                user.getRoles().add(sellerRole);
+                userRepo.save(user);
+            }
+
         } else {
             passwordService.passwordMatch(req.getPassword(), req.getConfirmPassword());
 
             user = new User();
-          //  user.setId(UUID.randomUUID());
+            //  user.setId(UUID.randomUUID());
             user.setFirstName(req.getFirstName());
             user.setMiddleName(req.getMiddleName());
             user.setLastName(req.getLastName());
@@ -84,12 +107,18 @@ public class SellerAuthService {
             userRepo.save(user);
 
             ActivationToken token = activationService.createToken(user);
-            String link = "http://localhost:8080/auth/customer/activate?token=" + token.getToken();
-            emailService.sendActivationMail(user.getEmail(), link);
 
 
+            // String link = "Activate your account using this link:\n\n" + token ;
+            // emailService.sendActivationEmail(user.getEmail(), "Account Activation", link);
+
+
+            emailService.sendActivationEmail(
+                    user.getEmail(),
+                    "Account Activation",
+                    token.getToken()
+            );
         }
-
 
         Seller seller = new Seller();
         seller.setUser(user);
@@ -99,7 +128,6 @@ public class SellerAuthService {
         seller.setStatus(SellerStatus.PENDING);
 
         sellerRepo.save(seller);
-
 
         if (req.getAddresses() != null && !req.getAddresses().isEmpty()) {
             for (AddressRequest a : req.getAddresses()) {
